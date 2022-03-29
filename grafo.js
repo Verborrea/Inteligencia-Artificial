@@ -233,6 +233,12 @@ function amplitud(lista_ady,nodo_inicial,nodo_final) {
       return [L[0],pasos];
     }else{
       let lista_padre = L[0];
+
+      // colorear dicho nodo de azul
+      stroke(color(30,100,200));
+      strokeWeight(node_size);
+      point(margin_size + lista_ady[L[0][0]].x*(edge_length+node_size), margin_size + lista_ady[L[0][0]].y*(edge_length+node_size));  
+
       L.splice(0,1);
       for (let i = 0; i < lista_ady[lista_padre[0]].e.length; i++){
         let esta_repetido = false;
@@ -418,53 +424,3 @@ function aStar(lista_ady,nodo_inicial,nodo_final) {
   }
   return [[],pasos];
 }
-
-// Esta es una version basada en la vista en Wikipedia.
-// function reconstruct_path(cameFrom, current, pasos) {
-//   let total_path = [current];
-//   while (current in cameFrom)
-//     current = cameFrom[current];
-//     total_path.splice(0,0,current);
-//   return [total_path,pasos];
-// }
-    
-// function newAstar(lista_ady,nodo_inicial,nodo_final) {
-//   let L = [[nodo_inicial]];
-//   let cameFrom = {};
-
-//   let gScore = {};
-//   for (let i = 0; i < lista_ady.length; i++){
-//     gScore.i = Infinity;
-//   }
-//   gScore.nodo_inicial = 0;
-
-//   let fScore = [];
-//   for (let i = 0; i < lista_ady.length; i++){
-//     fScore[i] = Infinity;
-//   }
-//   fScore[nodo_inicial] = distance(lista_ady[nodo_inicial],lista_ady[nodo_final]);
-
-//   let current = nodo_inicial;
-//   let pasos = 0;
-//   while (L.length > 0){
-//     pasos++;
-//     if (current == nodo_final)
-//       return reconstruct_path(cameFrom, current, pasos);
-
-//     L.splice(L.indexOf(current),1);
-//     for (let i = 0; i < lista_ady[current].e.length; i++){
-//       let vecino = lista_ady[current].e[i];
-//       console.log(vecino);
-//       let tentative_gScore =  gScore[current] + vecino.peso;
-//       if (tentative_gScore < gScore[vecino.id]){
-//         cameFrom.vecino[id] = current;
-
-//         gScore.vecino[id] = tentative_gScore;
-//         fScore[vecino[id]] = tentative_gScore + distance(lista_ady[vecino[id]],nodo_final);
-//         if (!(vecino.id in L)){
-//           L.push(vecino.id);
-//         }
-//       }
-//     }
-//   }
-// }
