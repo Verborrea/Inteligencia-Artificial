@@ -14,70 +14,79 @@ class Grafo{
     }
   
     // crear aristas
-    for (let f = 0; f < N-1; f++){
-      for (let c = 0; c < M; c++){
-        this.lista[M*f+c].e.push(
-          {
-            id : M*(f+1)+c,
-            peso: 1
-          }
-        );
-        this.lista[M*(f+1)+c].e.push(
-          {
-            id : M*f+c,
-            peso: 1
-          }
-        );
-      }
-    }
-    for (let f = 0; f < N; f++){
-      for (let c = 0; c < M-1; c++){
+    // derecha
+    for (let f = 0; f < N; f++)
+      for (let c = 0; c < M-1; c++)
         this.lista[M*f+c].e.push(
           {
             id : M*f+c+1,
             peso: 1
           }
         );
-        this.lista[M*f+c+1].e.push(
-          {
-            id : M*f+c,
-            peso: 1
-          }
-        );
-      }
-    }
-    for (let f = 0; f < N-1; f++){
-      for (let c = 0; c < M-1; c++){
+    
+    // derecha abajo
+    for (let f = 0; f < N-1; f++)
+      for (let c = 0; c < M-1; c++)
         this.lista[M*f+c].e.push(
           {
             id : M*(f+1)+c+1,
             peso: 1.41
           }
         );
-        this.lista[M*(f+1)+c+1].e.push(
+    // abajo
+    for (let f = 0; f < N-1; f++)
+      for (let c = 0; c < M; c++)
+        this.lista[M*f+c].e.push(
           {
-            id : M*f+c,
-            peso: 1.41
+            id : M*(f+1)+c,
+            peso: 1
           }
         );
-      }
-    }
-    for (let f = 0; f < N-1; f++){
-      for (let c = 1; c < M; c++){
+    // izquierda abajo
+    for (let f = 0; f < N-1; f++)
+      for (let c = 1; c < M; c++)
         this.lista[M*f+c].e.push(
           {
             id : M*(f+1)+c-1,
             peso: 1.41
           }
         );
-        this.lista[M*(f+1)+c-1].e.push(
+    // izquierda
+    for (let f = 0; f < N; f++)
+      for (let c = 1; c < M; c++)
+        this.lista[M*f+c].e.push(
           {
-            id : M*f+c,
+            id : M*f+c-1,
+            peso: 1
+          }
+        );
+    // izquierda arriba
+    for (let f = 1; f < N; f++)
+      for (let c = 1; c < M; c++)
+        this.lista[M*f+c].e.push(
+          {
+            id : M*(f-1)+c-1,
             peso: 1.41
           }
         );
-      }
-    }
+    // arriba
+    for (let f = 1; f < N; f++)
+      for (let c = 0; c < M; c++)
+        this.lista[M*f+c].e.push(
+          {
+            id : M*(f-1)+c,
+            peso: 1
+          }
+        );
+    // derecha arriba
+    for (let f = 1; f < N; f++)
+      for (let c = 0; c < M - 1; c++)
+        this.lista[M*f+c].e.push(
+          {
+            id : M*(f-1)+c+1,
+            peso: 1.41
+          }
+        );
   }
   get size(){
     return Object.keys(this.lista).length;
@@ -189,7 +198,7 @@ function profundidad(lista_ady,nodo_inicial,nodo_final) {
 
       // añadir a los hijos sin que haya bucles
       // o sea q no aparezcan en su lista padre
-      for (let i = 0; i < lista_ady[lista_padre[0]].e.length; i++){
+      for (let i = 0, pos = 0; i < lista_ady[lista_padre[0]].e.length; i++){
         // verificar si el hijo se encuentra en la lista_padre:
         let esta_repetido = false;
         let id_hijo = lista_ady[lista_padre[0]].e[i].id;
@@ -206,7 +215,7 @@ function profundidad(lista_ady,nodo_inicial,nodo_final) {
           lista_hijo = lista_hijo.concat(lista_padre);
 
           //metemos a la lista L al comienzo
-          L.splice(0,0,lista_hijo);
+          L.splice(pos++,0,lista_hijo);
         }
       }
     }
@@ -410,53 +419,52 @@ function aStar(lista_ady,nodo_inicial,nodo_final) {
   return [[],pasos];
 }
 
-// Wikipedia
-// function reconstruct_path(cameFrom, current)
-//     total_path := {current}
-//     while current in cameFrom.Keys:
-//         current := cameFrom[current]
-//         total_path.prepend(current)
-//     return total_path
+// Esta es una version basada en la vista en Wikipedia.
+// function reconstruct_path(cameFrom, current, pasos) {
+//   let total_path = [current];
+//   while (current in cameFrom)
+//     current = cameFrom[current];
+//     total_path.splice(0,0,current);
+//   return [total_path,pasos];
+// }
     
 // function newAstar(lista_ady,nodo_inicial,nodo_final) {
 //   let L = [[nodo_inicial]];
+//   let cameFrom = {};
 
-//   // For node n, cameFrom[n] is the node immediately preceding it on the cheapest path from start
-//   // to n currently known.
-//   let cameFrom = [];
-
-//   // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
-//   let gScore = [];
+//   let gScore = {};
 //   for (let i = 0; i < lista_ady.length; i++){
-//     gScore[i] = Infinity;
+//     gScore.i = Infinity;
 //   }
-//   gScore[nodo_inicial] = 0;
+//   gScore.nodo_inicial = 0;
 
-//   // For node n, fScore[n] := gScore[n] + h(n). fScore[n] represents our current best guess as to
-//   // how short a path from start to finish can be if it goes through n.
 //   let fScore = [];
 //   for (let i = 0; i < lista_ady.length; i++){
 //     fScore[i] = Infinity;
 //   }
 //   fScore[nodo_inicial] = distance(lista_ady[nodo_inicial],lista_ady[nodo_final]);
 
-//   // let current := the node in openSet having the lowest fScore[] value
 //   let current = nodo_inicial;
-//   while(L.length > 0){
-//     if(current == nodo_final)
-//       return reconstruct_path(cameFrom, current)
+//   let pasos = 0;
+//   while (L.length > 0){
+//     pasos++;
+//     if (current == nodo_final)
+//       return reconstruct_path(cameFrom, current, pasos);
 
-//     openSet.Remove(current)
-//     for each neighbor of current
-//     // d(current,neighbor) is the weight of the edge from current to neighbor
-//     // tentative_gScore is the distance from start to the neighbor through current
-//     tentative_gScore := gScore[current] + d(current, neighbor)
-//     if tentative_gScore < gScore[neighbor]
-//       // This path to neighbor is better than any previous one. Record it!
-//       cameFrom[neighbor] := current
-//       gScore[neighbor] := tentative_gScore
-//       fScore[neighbor] := tentative_gScore + h(neighbor)
-//       if neighbor not in openSet
-//         openSet.add(neighbor)
+//     L.splice(L.indexOf(current),1);
+//     for (let i = 0; i < lista_ady[current].e.length; i++){
+//       let vecino = lista_ady[current].e[i];
+//       console.log(vecino);
+//       let tentative_gScore =  gScore[current] + vecino.peso;
+//       if (tentative_gScore < gScore[vecino.id]){
+//         cameFrom.vecino[id] = current;
+
+//         gScore.vecino[id] = tentative_gScore;
+//         fScore[vecino[id]] = tentative_gScore + distance(lista_ady[vecino[id]],nodo_final);
+//         if (!(vecino.id in L)){
+//           L.push(vecino.id);
+//         }
+//       }
+//     }
 //   }
 // }
