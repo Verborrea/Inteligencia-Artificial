@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Busqueda</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+  <script src="../p5.min.js"></script>
+  <!-- <script src="../addons/p5.sound.js"></script> -->
+  <script src="grafo.js"></script>
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <main>
+    <div>
+      <div>
+        <span>Nro Filas: </span>
+        <input type="number" min="2" max="100" value="10" id="filas">
+      </div>
+      <div>
+        <span>Nro Columnas: </span>
+        <input type="number" min="2" max="100" value="10" id="columnas">
+      </div>
+    </div>
+    <label for=""algoritmo>Algoritmo</label>
+    <select name="algoritmo" id="algoritmo">
+      <option value="1">Profundidad</option>
+      <option value="2">Amplitud</option>
+      <option value="3" selected>HillClimbing</option>
+      <option value="4">MejorPrimero</option>
+      <option value="5">A*</option>
+    </select>
+    <div>
+      <span>Densidad: </span>
+      <span id="densidad_label">100</span>
+    </div>
+    <input type="range" min="2" max="100" value="100" class="slider" id="densidad">
+    <div>
+      <div>
+        <span>Nodo Inicial: </span>
+        <input type="number" min="0" max="10000" value="" id="nodo_inicial">
+      </div>
+      <div>
+        <span>Nodo Final: </span>
+        <input type="number" min="0" max="10000" value="" id="nodo_final">
+      </div>
+    </div>
+    <button onclick="buscarPath()">Buscar</button>
+    <div>
+      <span>Nro Pasos: </span>
+      <span id="pasos_label">0</span>
+    </div>
+  </main>
+</body>
+
+</html>
